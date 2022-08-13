@@ -10,7 +10,7 @@ var previous_right_mouse_click_global_position : Vector2
 
 var move_camera_with_mouse = false
 
-var mouse_click_right_timer : Timer = Timer.new()
+var character_creation_timer : Timer = Timer.new()
 var mouse_click_right_wait_time : float = 0.01
 
 var mouse_move_drift_weight : float = 100.0
@@ -23,9 +23,9 @@ func _ready():
 	level_scene = $Level
 	level_scene.init(self)
 	
-	mouse_click_right_timer.one_shot = true
-	mouse_click_right_timer.wait_time = mouse_click_right_wait_time
-	add_child(mouse_click_right_timer)
+	character_creation_timer.one_shot = true
+	character_creation_timer.wait_time = mouse_click_right_wait_time
+	add_child(character_creation_timer)
 	
 
 func _process(delta):
@@ -38,10 +38,10 @@ func _process(delta):
 		obstacle_mouse_pressed = false
 
 	if Input.is_action_pressed("mouse_click_right"):
-		if mouse_click_right_timer.is_stopped():
+		if character_creation_timer.is_stopped():
 			previous_right_mouse_click_global_position = get_global_mouse_position()
 			level_scene.call_deferred("create_character")
-			mouse_click_right_timer.start()
+			character_creation_timer.start()
 
 	if Input.is_action_pressed("mouse_click_middle"):
 		move_camera_with_mouse = true

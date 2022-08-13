@@ -66,7 +66,7 @@ func _draw():
 			
 			draw_circle(character.nav_destination, character.nav_agent.radius, Color(1.0, 0.5, 0.0, 1.0))
 			
-			if character.velocity > Vector2.ZERO:
+			if character.velocity != Vector2.ZERO:
 				draw_line(character.global_position, character.global_position + character.velocity, Color(1.0, 0.0, 1.0, 1.0), 3.0, false)
 			draw_circle(character.global_position + character.velocity, 5.0, Color(0.9, 0.0, 0.3, 1.0))
 	

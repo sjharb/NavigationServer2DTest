@@ -64,7 +64,7 @@ func character_navigation_finished():
 func character_velocity_computed(new_velocity : Vector2):
 	velocity = new_velocity
 	if !nav_agent.is_target_reached():
-		self.move_and_slide(velocity)
+		velocity = self.move_and_slide(velocity)
 	else:
 		self.global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
 
