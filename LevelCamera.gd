@@ -1,3 +1,6 @@
+# Author : Shaun Harbison
+# MIT License : 2022
+
 extends Camera2D
 
 var camera_target_position : Vector2
@@ -13,20 +16,14 @@ func _ready():
 
 
 func _physics_process(delta):
-	#print("camera_destination_weight = ", camera_destination_weight)
 	if camera_destination_weight <= 1.0:
-		#print("camera_destination_weight = ", camera_destination_weight)
 		camera_destination_weight += delta * camera_speed_multiplier
 		global_position = global_position.linear_interpolate(camera_target_position, camera_destination_weight)
-		#global_position = global_position.cubic_interpolate(camera_target_position, Vector2(0.0, 0.0), Vector2(0.0, 0.0), camera_destination_weight)
-		#print("global_position = ", global_position)
 	else:
 		pass
 
 func set_target_position(camera_target_position_to_set):
 	camera_target_position = camera_target_position_to_set
-	#print("set_target_position : camera_target_position = ", camera_target_position)
-	#print("self.global_position = ", self.global_position)
 	camera_destination_weight = 0.0
 
 func zoom_out():
