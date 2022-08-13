@@ -11,7 +11,7 @@ var previous_right_mouse_click_global_position : Vector2
 var move_camera_with_mouse = false
 
 var character_creation_timer : Timer = Timer.new()
-var mouse_click_right_wait_time : float = 0.01
+var mouse_click_right_wait_time : float = 0.15
 
 var mouse_move_drift_weight : float = 100.0
 
