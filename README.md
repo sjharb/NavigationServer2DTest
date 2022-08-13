@@ -13,3 +13,6 @@ Mouse interactive to add Navigation Agents and move Navigation Obstacles
 - Middle Scroll up/down to zoom in/out.
 
 Note: This is a work in progress and contains bugs as this is the first test I have done with the navigation server, agents and obstacles in Godot Engine 3.5.
+
+Known Bugs:
+Click/Drag Object drags all objects to the same position
