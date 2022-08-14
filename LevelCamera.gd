@@ -4,16 +4,13 @@
 extends Camera2D
 
 var camera_target_position : Vector2
-
 var camera_destination_weight = 0.0
-
 var camera_speed_multiplier = 1.0
 
 func _ready():
 	camera_destination_weight = 0.0
 	camera_target_position = self.global_position
 	current = true
-
 
 func _physics_process(delta):
 	if camera_destination_weight <= 1.0:

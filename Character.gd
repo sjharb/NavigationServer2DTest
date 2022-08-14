@@ -36,8 +36,8 @@ func _ready():
 func init_character(parent_level_scene, instanced_in_code : bool):
 	level_scene = parent_level_scene
 	if instanced_in_code:
-		self.global_position = level_scene.main.previous_right_mouse_click_global_position
-		set_navigation_position(level_scene.main.previous_left_mouse_click_global_position)
+		self.global_position = level_scene.previous_right_mouse_click_global_position
+		set_navigation_position(level_scene.previous_left_mouse_click_global_position)
 
 func _physics_process(delta : float) -> void:
 	next_nav_position = nav_agent.get_next_location()
