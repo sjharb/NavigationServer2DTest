@@ -16,6 +16,7 @@ Note: This is a work in progress and contains bugs as this is the first test I h
 
 Known Bugs:
 scene/2d/node_2d.cpp:356 - Condition "!parent_2d" is true. Returned: Transform2D()
+Using NavigationObstacle2d workaround until bug is fixed for NavigationObstacle2D in https://github.com/godotengine/godot/issues/64185
 
 ![alt text](assets/images/screen_shots/Navigation2DServerTest1.jpg)
 ![alt text](assets/images/screen_shots/Navgation2DServerTest2.jpg)
