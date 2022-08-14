@@ -5,7 +5,7 @@ extends Camera2D
 
 var camera_target_position : Vector2
 var camera_destination_weight = 0.0
-var camera_speed_multiplier = 1.0
+var camera_speed_multiplier = 0.8
 
 func _ready():
 	camera_destination_weight = 0.0

@@ -3,15 +3,19 @@
 
 extends Node2D
 
+var app_version = "1.0.0"
+
 var level_scene : Node2D
 var hud : Node2D
 
 func _ready():
+	
 	hud = $HUDCanvasLayer/HUD
 	hud.enable_hud()
+	hud.set_version_hud(app_version)
 	level_scene = $Level
 	level_scene.init(self)
-	
+
 func _process(delta):
 	if Input.is_action_pressed("mouse_click_left"):
 		level_scene.mouse_left_press()

@@ -10,7 +10,7 @@ script = ExtResource( 1 )
 [node name="ControllerHints" type="Label" parent="DebugMenu"]
 margin_right = 40.0
 margin_bottom = 14.0
-text = "Navigation 2D Server Test, author: Shaun Harbison, license: MIT
+text = "Navigation 2D Server Test, Author: Shaun Harbison, License: MIT
 Mouse interactive to add Navigation Agents and move Navigation Obstacles.
 (LMB) change navigation agent(s) target position, dragging is allowed. i.e. hold down the left mouse button and move the agent target.
 (LMB) move obstacles, click and drag to observe navigation agents avoid moving navigation obstacles.

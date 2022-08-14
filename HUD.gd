@@ -10,6 +10,6 @@ func _ready() -> void:
 
 func enable_hud() -> void:
 	self.visible = true
-	
-func set_character_velocity_text(text_to_set : String) -> void:
-	debug_menu.get_node("CharacterVelocity").text = text_to_set
+
+func set_version_hud(version_to_set):
+	debug_menu.get_node("ControllerHints").text = "v" + version_to_set + "\n" + debug_menu.get_node("ControllerHints").text
