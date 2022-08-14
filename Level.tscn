@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Level.gd" type="Script" id=2]
@@ -28,13 +28,10 @@ outlines = [ PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 ) ]
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="CubeMesh" id=2]
-size = Vector3( 1280, 1280, 1 )
-
 [node name="Level" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="LevelTileMap" type="TileMap" parent="."]
 modulate = Color( 0.141176, 0.141176, 0.141176, 1 )
 z_index = -2
 tile_set = SubResource( 5 )
@@ -44,17 +41,6 @@ tile_data = PoolIntArray( 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65
 
 [node name="Character" parent="." instance=ExtResource( 1 )]
 position = Vector2( 540, 288 )
-
-[node name="DebugMenu" type="Node2D" parent="."]
-
-[node name="Character Velocity" type="Label" parent="DebugMenu"]
-margin_right = 40.0
-margin_bottom = 14.0
-
-[node name="LevelCamera" type="Camera2D" parent="."]
-position = Vector2( 408, 432 )
-current = true
-script = ExtResource( 3 )
 
 [node name="ObstacleMovable" parent="." instance=ExtResource( 4 )]
 position = Vector2( 264, 284 )
@@ -68,14 +54,13 @@ position = Vector2( 1052, 292 )
 [node name="ObstacleMovable4" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1056, 800 )
 
-[node name="LevelMeshInstance2D" type="MeshInstance2D" parent="."]
-visible = false
-position = Vector2( 418, 434 )
-z_index = -120
-mesh = SubResource( 2 )
+[node name="DebugMenu" type="Node2D" parent="."]
 
-[node name="LevelPolygon2D" type="Polygon2D" parent="."]
-visible = false
-z_index = -1
-color = Color( 0.894118, 0.882353, 0.784314, 1 )
-polygon = PoolVector2Array( 380, 89, 44, 340, 91, 678, 580, 607, 801, 313, 463, 189, 515, 345, 557, 510, 289, 550, 251, 298, 407, 170 )
+[node name="Character Velocity" type="Label" parent="DebugMenu"]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="LevelCamera" type="Camera2D" parent="."]
+position = Vector2( 408, 432 )
+current = true
+script = ExtResource( 3 )

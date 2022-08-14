@@ -7,6 +7,7 @@ var characters = []
 var level_camera
 var main
 var obstacles = []
+var level_tile_map : TileMap
 
 var obstacle_selected = false
 
@@ -22,6 +23,7 @@ var mouse_move_drift_weight : float = 100.0
 
 func _ready():
 	level_camera = $LevelCamera
+	level_tile_map = $LevelTileMap
 	
 	character_creation_timer.one_shot = true
 	character_creation_timer.wait_time = character_creation_timer_wait_time
@@ -90,7 +92,10 @@ func _draw():
 	
 	for obstacle in obstacles:
 		if obstacle is Node2D and is_instance_valid(obstacle) and obstacle.is_inside_tree():
-			draw_circle(obstacle.global_position, obstacle.collision_radius, Color(0.5, 0.6, 0.4, 1.0))
+			if obstacle.nav_obstacle.estimate_radius:
+				draw_circle(obstacle.global_position, obstacle.collision_radius, Color(0.5, 0.6, 0.4, 1.0))
+			else:
+				draw_circle(obstacle.global_position, obstacle.obstacle_nav_radius, Color(0.5, 0.6, 0.4, 1.0))
 	
 	if level_camera is Camera2D and is_instance_valid(level_camera) and level_camera.is_inside_tree():
 		draw_line(level_camera.global_position, level_camera.camera_target_position, Color(0.3, 0.7, 0.1, 1.0), false)
