@@ -14,7 +14,6 @@ var mouse_right_pressed = false
 var mouse_middle_pressed = false
 
 func _ready():
-	
 	hud = $HUDCanvasLayer/HUD
 	hud.enable_hud()
 	hud.set_version_hud(app_version)

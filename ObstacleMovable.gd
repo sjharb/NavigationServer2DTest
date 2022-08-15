@@ -24,7 +24,7 @@ func _ready():
 	nav_obstacle.estimate_radius = false
 	nav_obstacle.radius = obstacle_nav_radius
 	
-
+# init called by parent, inits flow down from parent nodes to create easy parent child references
 func init_obstacle(parent_level_scene):
 	level_scene = parent_level_scene
 	# Workaround to set NavigationObstacle2D navigation map properly until PR gets fixed in 3.5
