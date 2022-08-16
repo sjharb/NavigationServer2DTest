@@ -1,6 +1,8 @@
 # Navigation2DServerTest
 ### Godot Navigation2DServer test for Godot Engine 3.5.
 
+![alt text](assets/images/screen_shots/Navigation2DServerTest_gif_8_15_2022.gif)
+
 #### Basic 2D navigation server demo in Godot Engine 3.5 using the following components:
 - Navigation2DServer
 - NavigationAgent2D
