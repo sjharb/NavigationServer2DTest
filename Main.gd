@@ -3,7 +3,7 @@
 
 extends Node2D
 
-var app_version : String = "1.0.0"
+var app_version : String = "1.1.0"
 
 var level_scene : Node2D
 var hud : Node2D
