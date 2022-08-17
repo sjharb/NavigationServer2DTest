@@ -3,7 +3,7 @@
 
 extends Node2D
 
-var app_version = "1.0.0"
+var app_version : String = "1.0.0"
 
 var level_scene : Node2D
 var hud : Node2D
@@ -13,14 +13,14 @@ var mouse_left_pressed = false
 var mouse_right_pressed = false
 var mouse_middle_pressed = false
 
-func _ready():
+func _ready() -> void:
 	hud = $HUDCanvasLayer/HUD
 	hud.enable_hud()
 	hud.set_version_hud(app_version)
 	level_scene = $Level
 	level_scene.init(self)
 
-func _process(delta):
+func _process(_delta : float) -> void:
 	if Input.is_action_pressed("mouse_click_left"):
 		mouse_left_pressed = true
 		level_scene.mouse_left_press()
@@ -45,7 +45,7 @@ func _process(delta):
 			level_scene.mouse_middle_release()
 			mouse_middle_pressed = false
 
-func _unhandled_input(event):
+func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_WHEEL_DOWN:
 			level_scene.mouse_middle_wheel_down()

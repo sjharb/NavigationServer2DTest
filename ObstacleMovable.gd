@@ -14,7 +14,7 @@ var level_scene
 
 var selected = false
 
-func _ready():
+func _ready() -> void:
 	obstacle_area = $Area2D
 	obstacle_area.connect("input_event", self, "_on_area_input_event")
 	obstacle_area.get_node("CollisionShape2D").shape.radius = collision_radius
@@ -25,25 +25,25 @@ func _ready():
 	nav_obstacle.radius = obstacle_nav_radius
 	
 # init called by parent, inits flow down from parent nodes to create easy parent child references
-func init_obstacle(parent_level_scene):
+func init_obstacle(parent_level_scene) -> void:
 	level_scene = parent_level_scene
 	# Workaround to set NavigationObstacle2D navigation map properly until PR gets fixed in 3.5
 	# https://github.com/godotengine/godot/issues/64185
 	Navigation2DServer.agent_set_map(nav_obstacle.get_rid(), get_world_2d().get_navigation_map())
 	Navigation2DServer.agent_set_radius(nav_obstacle.get_rid(), obstacle_nav_radius)
 
-func _process(delta):
+func _process(_delta : float) -> void:
 	if selected:
-		self.global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())
+		global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())
 
-func _on_area_input_event(event_viewport : Node, event : InputEvent, event_shape_index : int):
+func _on_area_input_event(event_viewport : Node, event : InputEvent, event_shape_index : int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
 				level_scene.obstacle_selected = true
-				self.selected = true
+				selected = true
 		else:
 			if level_scene.obstacle_selected:
 				level_scene.obstacle_selected = false
 				selected = false
-				self.global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())
+				global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())

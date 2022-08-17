@@ -9,17 +9,17 @@ var camera_speed_multiplier = 0.8
 
 func _ready():
 	camera_destination_weight = 0.0
-	camera_target_position = self.global_position
+	camera_target_position = global_position
 	current = true
 
-func _physics_process(delta):
+func _physics_process(delta : float):
 	if camera_destination_weight <= 1.0:
 		camera_destination_weight += delta * camera_speed_multiplier
 		global_position = global_position.linear_interpolate(camera_target_position, camera_destination_weight)
 	else:
 		pass
 
-func set_target_position(camera_target_position_to_set):
+func set_target_position(camera_target_position_to_set : Vector2):
 	camera_target_position = camera_target_position_to_set
 	camera_destination_weight = 0.0
 

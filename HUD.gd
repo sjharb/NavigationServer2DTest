@@ -9,7 +9,7 @@ func _ready() -> void:
 	debug_menu = $DebugMenu
 
 func enable_hud() -> void:
-	self.visible = true
+	visible = true
 
-func set_version_hud(version_to_set):
+func set_version_hud(version_to_set : String) -> void:
 	debug_menu.get_node("ControllerHints").text = "v" + version_to_set + "\n" + debug_menu.get_node("ControllerHints").text

@@ -21,7 +21,7 @@ var level_camera_mouse_move_drift_weight : float = 100.0
 var character_creation_time_limit_timer : Timer = Timer.new()
 export var character_creation_time_limit_timer_wait_time : float = 0.15
 
-func _ready():
+func _ready() -> void:
 	# create easy reference variables for children
 	level_camera = $LevelCamera
 	level_tile_map = $LevelTileMap
@@ -32,12 +32,12 @@ func _ready():
 	add_child(character_creation_time_limit_timer)
 
 # init called by parent, inits flow down from parent nodes to create easy parent child references
-func init(level_parent_scene):
+func init(level_parent_scene) -> void:
 	main = level_parent_scene
 	init_pre_existing_level_characters()
 	init_pre_existing_level_obstacles()
 	
-func init_pre_existing_level_characters():
+func init_pre_existing_level_characters() -> void:
 	# init all the character scenes in the scene tree when starting the level
 	# other characters created in create_character() will be initilized at that time
 	for child_node in get_children():
@@ -50,7 +50,7 @@ func init_pre_existing_level_characters():
 				characters.push_back(child_node)
 				
 
-func init_pre_existing_level_obstacles():
+func init_pre_existing_level_obstacles() -> void:
 	# init all the obstacle scenes in the scene tree when starting the level
 	for child_node in get_children():
 		if child_node is Node2D: # obstacles are currently Node2D
@@ -58,15 +58,16 @@ func init_pre_existing_level_obstacles():
 				child_node.init_obstacle(self)
 				obstacles.push_back(child_node)
 
-func move_camera_with_players():
+# TODO, add option for camera character following
+func move_camera_with_players() -> void:
 	if !characters.empty():
 		level_camera.global_position = characters[0].global_position
 
-func _process(delta):
+func _process(_delta : float) -> void:
 	# update for the draw function
 	update()
 
-func _draw():
+func _draw() -> void:
 	# TODO: draw needs some clean up and has some draw errors
 	# Error: canvas_item_add_polygon: Invalid polygon data, triangulation failed.
 	for character in characters:
@@ -112,7 +113,7 @@ func _draw():
 		draw_line(level_camera.global_position, level_camera.camera_target_position, Color(0.3, 0.7, 0.1, 1.0), false)
 
 # Create a new instance of the Character scene
-func create_character():
+func create_character() -> void:
 	var new_character = load("res://Character.tscn")
 	var new_character_scene = new_character.instance()
 	add_child(new_character_scene)
@@ -121,40 +122,40 @@ func create_character():
 	# store the character scene reference in the level character array
 	characters.push_back(new_character_scene)
 
-func mouse_left_press():
+func mouse_left_press() -> void:
 	if !obstacle_selected:
 		previous_left_mouse_click_global_position = get_global_mouse_position()
 		# set all level characters new navigation position
 		for character in characters:
 			character.set_navigation_position(get_global_mouse_position())
 
-func mouse_left_release():
+func mouse_left_release() -> void:
 	obstacle_selected = false
 	
-func mouse_right_press():
+func mouse_right_press() -> void:
 	if character_creation_time_limit_timer.is_stopped():
 		previous_right_mouse_click_global_position = get_global_mouse_position()
 		call_deferred("create_character")
 		character_creation_time_limit_timer.start()
 	
-func mouse_right_release():
+func mouse_right_release() -> void:
 	pass
 
-func mouse_middle_press():
+func mouse_middle_press() -> void:
 	level_camera_move_with_mouse = true
 	level_camera.set_target_position(get_global_mouse_position())
 	
-func mouse_middle_release():
+func mouse_middle_release() -> void:
 	if level_camera_move_with_mouse:
 		level_camera_move_with_mouse = false
 		level_camera.set_target_position(level_camera.global_position + level_camera.global_position.direction_to(get_global_mouse_position()) * level_camera_mouse_move_drift_weight)
 	
-func mouse_middle_wheel_down():
+func mouse_middle_wheel_down() -> void:
 	level_camera.zoom_out()
 	
-func mouse_middle_wheel_up():
+func mouse_middle_wheel_up() -> void:
 	level_camera.zoom_in()
 
-func mouse_motion():
+func mouse_motion() -> void:
 	if level_camera_move_with_mouse:
 		level_camera.set_target_position(get_global_mouse_position())
