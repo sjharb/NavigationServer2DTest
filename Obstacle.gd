@@ -7,7 +7,6 @@ var obstacle_area
 var collision_radius : float = 20.0
 var obstacle_nav_radius : float = 15.0
 
-var nav_agent : NavigationAgent2D #not currently used
 var nav_obstacle : NavigationObstacle2D
 
 var level_scene
@@ -18,8 +17,6 @@ func _ready() -> void:
 	obstacle_area = $Area2D
 	obstacle_area.connect("input_event", self, "_on_area_input_event")
 	obstacle_area.get_node("CollisionShape2D").shape.radius = collision_radius
-	nav_agent = $NavAgent #not currently used
-	nav_agent.avoidance_enabled = false #not currently used
 	nav_obstacle = $NavObstacle
 	nav_obstacle.estimate_radius = false
 	nav_obstacle.radius = obstacle_nav_radius
@@ -34,7 +31,7 @@ func init_obstacle(parent_level_scene) -> void:
 
 func _process(_delta : float) -> void:
 	if selected:
-		global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())
+		global_position = Navigation2DServer.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())
 
 func _on_area_input_event(event_viewport : Node, event : InputEvent, event_shape_index : int) -> void:
 	if event is InputEventMouseButton:
@@ -46,4 +43,4 @@ func _on_area_input_event(event_viewport : Node, event : InputEvent, event_shape
 			if level_scene.obstacle_selected:
 				level_scene.obstacle_selected = false
 				selected = false
-				global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), get_global_mouse_position())
+				global_position = Navigation2DServer.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())

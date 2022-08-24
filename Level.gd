@@ -7,6 +7,8 @@ var main
 var characters = []
 var obstacles = []
 
+var level_navigation_map
+
 var level_tile_map : TileMap
 
 var obstacle_selected = false
@@ -25,6 +27,8 @@ func _ready() -> void:
 	# create easy reference variables for children
 	level_camera = $LevelCamera
 	level_tile_map = $LevelTileMap
+	
+	level_navigation_map = get_world_2d().get_navigation_map()
 	
 	# configure and add the character_creation_time_limit_timer as a child of the level
 	character_creation_time_limit_timer.one_shot = true
