@@ -1,5 +1,5 @@
 # NavigationServer2DTest
-### Godot Navigation2DServer test for Godot Engine 4.0.
+### Godot NavigationServer2D test for Godot Engine 4.0.
 #### See 3.5 branch for old demo. https://github.com/sjharb/Navigation2DServerTest/tree/3.5
 
 Godot Asset Library
