@@ -1,5 +1,6 @@
-# Navigation2DServerTest
-### Godot Navigation2DServer test for Godot Engine 3.5.
+# NavigationServer2DTest
+### Godot NavigationServer2D test for Godot Engine 4.0.
+#### See 3.5 branch for old demo. https://github.com/sjharb/Navigation2DServerTest/tree/3.5
 
 Godot Asset Library
 https://godotengine.org/asset-library/asset/1427
@@ -10,7 +11,7 @@ https://youtu.be/WCDA0O8VUIE
 ![alt text](assets/images/screen_shots/Navigation2DServerTest_gif_8_15_2022.gif)
 
 #### Basic 2D navigation server demo in Godot Engine 3.5 using the following components
-- Navigation2DServer
+- NavigationServer2D
 - NavigationAgent2D
 - NavigationObstacle2D
 
