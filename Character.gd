@@ -103,6 +103,7 @@ func character_velocity_computed(calculated_velocity : Vector2) -> void:
 	# check if nav agent target is reached
 	if !nav_agent.is_target_reached():
 		# move and slide with the new calculated velocity
+		#global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
 		velocity = move_and_slide(velocity)
 	else:
 		# if reached target, stand at the closest point in the navigation map

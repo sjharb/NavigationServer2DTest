@@ -24,10 +24,24 @@ func _ready() -> void:
 # init called by parent, inits flow down from parent nodes to create easy parent child references
 func init_obstacle(parent_level_scene) -> void:
 	level_scene = parent_level_scene
+	# START WORKAROUND -------------------------------------------------------------
 	# Workaround to set NavigationObstacle2D navigation map properly until PR gets fixed in 3.5
+	# Update: Fix is cherry picked for Godot v3.5.2
 	# https://github.com/godotengine/godot/issues/64185
-	Navigation2DServer.agent_set_map(nav_obstacle.get_rid(), get_world_2d().get_navigation_map())
-	Navigation2DServer.agent_set_radius(nav_obstacle.get_rid(), obstacle_nav_radius)
+	# Fix: https://github.com/godotengine/godot/pull/66530
+	var engine_info : Dictionary = Engine.get_version_info()
+	var major = engine_info.get("major")
+	var minor = engine_info.get("minor")
+	var patch = engine_info.get("patch")
+
+	var nav_fix_66530_applied = true
+	if major <= int(3) and minor <= int(5) and patch <= int(1):
+		nav_fix_66530_applied = false
+	
+	if not nav_fix_66530_applied:
+		Navigation2DServer.agent_set_map(nav_obstacle.get_rid(), get_world_2d().get_navigation_map())
+		Navigation2DServer.agent_set_radius(nav_obstacle.get_rid(), obstacle_nav_radius)
+	# END WORKAROUND -------------------------------------------------------------
 
 func _process(_delta : float) -> void:
 	if selected:

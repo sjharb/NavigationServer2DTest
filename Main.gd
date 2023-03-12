@@ -5,6 +5,8 @@ extends Node2D
 
 var app_version : String = "1.1.0"
 
+var nav_fix_66530_applied : bool = false
+
 var level_scene : Node2D
 var hud : Node2D
 

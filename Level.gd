@@ -9,7 +9,7 @@ var obstacles = []
 
 var level_navigation_map
 
-var level_tile_map : TileMap
+#var level_tile_map : TileMap
 
 var obstacle_selected = false
 
@@ -26,7 +26,8 @@ export var character_creation_time_limit_timer_wait_time : float = 0.15
 func _ready() -> void:
 	# create easy reference variables for children
 	level_camera = $LevelCamera
-	level_tile_map = $LevelTileMap
+	#level_tile_map = $LevelTileMap
+	#level_tile_map = $LevelNavigationPolygonInstance
 	
 	level_navigation_map = get_world_2d().get_navigation_map()
 	
