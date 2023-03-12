@@ -13,6 +13,7 @@ var level_scene : Node2D
 @export var nav_optimize_path : bool = false
 @export var nav_avoidance_enabled : bool = true
 @export var player_speed_multiplier : float = 50.0
+@export var keep_closest_point_in_nav: bool = true
 
 # final navigation destination position/point
 var nav_destination : Vector2 
@@ -25,12 +26,17 @@ var player_nav_path : Array = []
 # The actual path being calcuated during travel, used in the draw function
 var player_real_nav_path : Array = []
 
+func init():
+	# Using floating motion mode.
+	# Top-down perspective so the character is not using gravity.
+	self.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+
 func _ready() -> void:
-	# init velocity
+	# Cnit velocity
 	# Vector2.ZERO is enumeration for Vector2(0,0)
 	velocity = Vector2.ZERO
 	
-	# connect nav agent signal callback functions
+	# Connect nav agent signal callback functions.
 	nav_agent.connect("path_changed",Callable(self,"character_path_changed"))
 	nav_agent.connect("target_reached",Callable(self,"character_target_reached_reached"))
 	nav_agent.connect("navigation_finished",Callable(self,"character_navigation_finished"))
@@ -48,13 +54,19 @@ func init_player(parent_level_scene : Node2D, instanced_in_code : bool) -> void:
 	# init positions
 	if instanced_in_code:
 		# init position(s) for player existing in the level scene during start
-		global_position = level_scene.previous_right_mouse_click_global_position
-		nav_destination = level_scene.previous_left_mouse_click_global_position
-		next_nav_position = level_scene.previous_right_mouse_click_global_position
+		if keep_closest_point_in_nav:
+			# find closest point clicked in the nav
+			global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), level_scene.previous_right_mouse_click_global_position)
+			nav_destination = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), level_scene.previous_left_mouse_click_global_position)
+			next_nav_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), level_scene.previous_right_mouse_click_global_position)
+		else:
+			global_position = level_scene.previous_right_mouse_click_global_position
+			nav_destination = level_scene.previous_left_mouse_click_global_position
+			next_nav_position = level_scene.previous_right_mouse_click_global_position
 	else:
 		# init position(s) for player scenes created during play
-		nav_destination = global_position
-		next_nav_position = global_position
+		nav_destination = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
+		next_nav_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
 		
 	# set the initial target location to nav_destination
 	nav_agent.set_target_position(nav_destination)
@@ -97,17 +109,15 @@ func character_navigation_finished() -> void:
 	pass
 	
 func character_velocity_computed(calculated_velocity : Vector2) -> void:
-	velocity = calculated_velocity
-	
 	# check if nav agent target is reached
 	if !nav_agent.is_target_reached():
 		# move and slide with the new calculated velocity
-		#global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
-		set_velocity(velocity)
+		set_velocity(calculated_velocity)
 		move_and_slide()
-		velocity = velocity
 	else:
+		# TODO, implement logic for when the player reaches the target.
+		pass
 		# if reached target, stand at the closest point in the navigation map
-		global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
+#		global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
 
 

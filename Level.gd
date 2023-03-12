@@ -22,7 +22,7 @@ var previous_right_mouse_click_global_position : Vector2
 
 @onready var level_camera: Camera2D = get_node("LevelCamera")
 var level_camera_move_with_mouse = false
-var level_camera_mouse_move_drift_weight : float = 100.0
+var level_camera_mouse_move_drift_weight : float = 20.0
 
 var player_creation_time_limit_timer : Timer = Timer.new()
 @export var player_creation_time_limit_timer_wait_time : float = 0.15
@@ -76,8 +76,6 @@ func _process(_delta : float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	# TODO: draw needs some clean up and has some draw errors
-	# Error: canvas_item_add_polygon: Invalid polygon data, triangulation failed.
 	for player in players:
 		if player is CharacterBody2D and is_instance_valid(player) and player.is_inside_tree():
 			if player.player_real_nav_path.size() > 1:

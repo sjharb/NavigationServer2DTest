@@ -7,6 +7,7 @@
 
 [node name="CharacterNavAgent" type="CharacterBody2D"]
 position = Vector2(250, 194)
+motion_mode = 1
 script = ExtResource("1_71h61")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
