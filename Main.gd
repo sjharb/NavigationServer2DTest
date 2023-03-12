@@ -3,12 +3,10 @@
 
 extends Node2D
 
-var app_version : String = "1.1.0"
+var app_version : String = "2.0.1"
 
-var nav_fix_66530_applied : bool = false
-
-var level_scene : Node2D
-var hud : Node2D
+@onready var level_scene : Node2D = get_node("Level")
+@onready var hud : Node2D = get_node("HudCanvasLayer/Hud")
 
 # mouse click does not have a release action, keep track manually
 var mouse_left_pressed = false
@@ -16,10 +14,8 @@ var mouse_right_pressed = false
 var mouse_middle_pressed = false
 
 func _ready() -> void:
-	hud = $HUDCanvasLayer/HUD
 	hud.enable_hud()
 	hud.set_version_hud(app_version)
-	level_scene = $Level
 	level_scene.init(self)
 
 func _process(_delta : float) -> void:

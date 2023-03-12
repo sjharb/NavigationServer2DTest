@@ -3,6 +3,8 @@
 
 extends Camera2D
 
+class_name LevelCamera
+
 var camera_target_position : Vector2
 var camera_destination_weight = 0.0
 var camera_speed_multiplier = 0.8
@@ -30,7 +32,6 @@ func zoom_in():
 	new_zoom = new_zoom.clamp(Vector2(0.1, 0.1), Vector2(5.0, 5.0))
 	new_zoom = new_zoom.snapped(Vector2(0.1, 0.1))
 	set_zoom(new_zoom)
-	print("zoom_in = ", zoom)
 	
 func zoom_out():
 	var new_zoom: Vector2 = zoom
@@ -39,4 +40,3 @@ func zoom_out():
 	new_zoom = new_zoom.clamp(Vector2(0.1, 0.1), Vector2(5.0, 5.0))
 	new_zoom = new_zoom.snapped(Vector2(0.1, 0.1))
 	set_zoom(new_zoom)
-	print("zoom_out = ", zoom)

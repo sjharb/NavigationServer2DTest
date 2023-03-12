@@ -3,11 +3,13 @@
 
 extends Node2D
 
+class_name Level
+
 var main
-var characters = []
+var players = []
 var obstacles = []
 
-@onready var character_resource = preload("res://Character.gd")
+@onready var player_resource = preload("res://player.tscn")
 
 var level_navigation_map
 
@@ -18,43 +20,42 @@ var obstacle_selected = false
 var previous_left_mouse_click_global_position : Vector2
 var previous_right_mouse_click_global_position : Vector2
 
-var level_camera: Camera2D
+@onready var level_camera: Camera2D = get_node("LevelCamera")
 var level_camera_move_with_mouse = false
 var level_camera_mouse_move_drift_weight : float = 100.0
 
-var character_creation_time_limit_timer : Timer = Timer.new()
-@export var character_creation_time_limit_timer_wait_time : float = 0.15
+var player_creation_time_limit_timer : Timer = Timer.new()
+@export var player_creation_time_limit_timer_wait_time : float = 0.15
 
 func _ready() -> void:
 	# create easy reference variables for children
-	level_camera = $LevelCamera
 	#level_tile_map = $LevelTileMap
 	#level_tile_map = $LevelNavigationPolygonInstance
 	
 	level_navigation_map = get_world_2d().get_navigation_map()
 	
-	# configure and add the character_creation_time_limit_timer as a child of the level
-	character_creation_time_limit_timer.one_shot = true
-	character_creation_time_limit_timer.wait_time = character_creation_time_limit_timer_wait_time
-	add_child(character_creation_time_limit_timer)
+	# configure and add the player_creation_time_limit_timer as a child of the level
+	player_creation_time_limit_timer.one_shot = true
+	player_creation_time_limit_timer.wait_time = player_creation_time_limit_timer_wait_time
+	add_child(player_creation_time_limit_timer)
 
 # init called by parent, inits flow down from parent nodes to create easy parent child references
 func init(level_parent_scene) -> void:
 	main = level_parent_scene
-	init_pre_existing_level_characters()
+	init_pre_existing_level_players()
 	init_pre_existing_level_obstacles()
 	
-func init_pre_existing_level_characters() -> void:
-	# init all the character scenes in the scene tree when starting the level
-	# other characters created in create_character() will be initilized at that time
+func init_pre_existing_level_players() -> void:
+	# init all the player scenes in the scene tree when starting the level
+	# other players created in create_player() will be initilized at that time
 	for child_node in get_children():
 		if child_node is CharacterBody2D:
-			if child_node.has_method("init_character"):
-				if characters.is_empty():
-					# if no target i.e. left mouse click yet, set target to character position
+			if child_node.has_method("init_player"):
+				if players.is_empty():
+					# if no target i.e. left mouse click yet, set target to player position
 					previous_left_mouse_click_global_position = child_node.global_position
-				child_node.init_character(self, false)
-				characters.push_back(child_node)
+				child_node.init_player(self, false)
+				players.push_back(child_node)
 				
 
 func init_pre_existing_level_obstacles() -> void:
@@ -65,10 +66,10 @@ func init_pre_existing_level_obstacles() -> void:
 				child_node.init_obstacle(self)
 				obstacles.push_back(child_node)
 
-# TODO, add option for camera character following
+# TODO, add option for camera player following
 func move_camera_with_players() -> void:
-	if !characters.is_empty():
-		level_camera.global_position = characters[0].global_position
+	if !players.is_empty():
+		level_camera.global_position = players[0].global_position
 
 func _process(_delta : float) -> void:
 	# update for the draw function
@@ -77,37 +78,37 @@ func _process(_delta : float) -> void:
 func _draw() -> void:
 	# TODO: draw needs some clean up and has some draw errors
 	# Error: canvas_item_add_polygon: Invalid polygon data, triangulation failed.
-	for character in characters:
-		if character is CharacterBody2D and is_instance_valid(character) and character.is_inside_tree():
-			if character.character_nav_path.size() > 1:
-				var previous_line_point : Vector2 = character.character_nav_path[1]
-				for path_index in range(1, character.character_nav_path.size()):
-					var line_point : Vector2 = character.character_nav_path[path_index]
+	for player in players:
+		if player is CharacterBody2D and is_instance_valid(player) and player.is_inside_tree():
+			if player.player_real_nav_path.size() > 1:
+				var previous_line_point : Vector2 = player.player_real_nav_path[1]
+				for path_index in range(1, player.player_real_nav_path.size()):
+					var line_point : Vector2 = player.player_real_nav_path[path_index]
 					if previous_line_point is Vector2 and line_point is Vector2 and previous_line_point.distance_to(line_point) > 2.0:
 						draw_line(previous_line_point,line_point,Color(1.0, 0.3, 0.7, 1.0),3.0)
 						draw_circle(line_point, 4.0, Color(0.1, 5.0, 0.6, 1.0))
 					previous_line_point = line_point
 			
-			if character.character_real_nav_path.size() > 1:
-				var previous_line_point : Vector2 = character.character_real_nav_path[0]
-				for path_index in range(1, character.character_real_nav_path.size()):
-					var line_point : Vector2 = character.character_real_nav_path[path_index]
+			if player.player_real_nav_path.size() > 1:
+				var previous_line_point : Vector2 = player.player_real_nav_path[0]
+				for path_index in range(1, player.player_real_nav_path.size()):
+					var line_point : Vector2 = player.player_real_nav_path[path_index]
 					if previous_line_point is Vector2 and line_point is Vector2 and previous_line_point.distance_to(line_point) > 2.0:
 						draw_line(previous_line_point,line_point,Color(0.6, 0.6, 0.2, 1.0),3.0)
 						draw_circle(line_point, 4.0, Color(0.3, 0.8, 0.2, 1.0))
 					previous_line_point = line_point
 			
-			draw_circle(character.next_nav_position, 10.0, Color(0.5, 1.0, 0.1, 1.0))
-			if character.global_position.distance_to(character.next_nav_position) > 1.0:
-				draw_line(character.global_position,character.next_nav_position,Color(1.0, 0.6, 0.8, 1.0),5.0)
+			draw_circle(player.next_nav_position, 10.0, Color(0.5, 1.0, 0.1, 1.0))
+			if player.global_position.distance_to(player.next_nav_position) > 1.0:
+				draw_line(player.global_position,player.next_nav_position,Color(1.0, 0.6, 0.8, 1.0),5.0)
 			
-			draw_circle(character.global_position, character.nav_agent.radius, Color(1.0, 0.0, 0.3, 1.0))
+			draw_circle(player.global_position, player.nav_agent.radius, Color(1.0, 0.0, 0.3, 1.0))
 			
-			draw_circle(character.nav_destination, character.nav_agent.radius, Color(0.7, 0.5, 0.2, 1.0))
+			draw_circle(player.nav_destination, player.nav_agent.radius, Color(0.7, 0.5, 0.2, 1.0))
 			
-			if character.global_position.distance_to(character.velocity) > 2.0:
-				draw_line(character.global_position,character.global_position + character.velocity,Color(0.3, 0.5, 1.0, 1.0),3.0)
-			draw_circle(character.global_position + character.velocity, 5.0, Color(0.2, 0.5, 0.7, 1.0))
+			if player.global_position.distance_to(player.velocity) > 2.0:
+				draw_line(player.global_position,player.global_position + player.velocity,Color(0.3, 0.5, 1.0, 1.0),3.0)
+			draw_circle(player.global_position + player.velocity, 5.0, Color(0.2, 0.5, 0.7, 1.0))
 	
 	for obstacle in obstacles:
 		if obstacle is Node2D and is_instance_valid(obstacle) and obstacle.is_inside_tree():
@@ -120,30 +121,29 @@ func _draw() -> void:
 		draw_line(level_camera.global_position, level_camera.camera_target_position, Color(0.3, 0.7, 0.1, 1.0), false)
 
 # Create a new instance of the Character scene
-func create_character() -> void:
-	var new_character = load("res://Character.tscn")
-	var new_character_scene = new_character.instantiate()
-	add_child(new_character_scene)
+func create_player() -> void:
+	var new_player_scene = player_resource.instantiate()
+	add_child(new_player_scene)
 	# init after adding as child of the level
-	new_character_scene.init_character(self, true)
-	# store the character scene reference in the level character array
-	characters.push_back(new_character_scene)
+	new_player_scene.init_player(self, true)
+	# store the player scene reference in the level player array
+	players.push_back(new_player_scene)
 
 func mouse_left_press() -> void:
 	if !obstacle_selected:
 		previous_left_mouse_click_global_position = get_global_mouse_position()
-		# set all level characters new navigation position
-		for character in characters:
-			character.set_navigation_position(get_global_mouse_position())
+		# set all level players new navigation position
+		for player in players:
+			player.set_navigation_position(get_global_mouse_position())
 
 func mouse_left_release() -> void:
 	obstacle_selected = false
 	
 func mouse_right_press() -> void:
-	if character_creation_time_limit_timer.is_stopped():
+	if player_creation_time_limit_timer.is_stopped():
 		previous_right_mouse_click_global_position = get_global_mouse_position()
-		call_deferred("create_character")
-		character_creation_time_limit_timer.start()
+		call_deferred("create_player")
+		player_creation_time_limit_timer.start()
 	
 func mouse_right_release() -> void:
 	pass

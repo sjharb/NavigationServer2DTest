@@ -3,10 +3,12 @@
 
 extends Node2D
 
-var debug_menu : Node2D
+class_name Hud
+
+@onready var debug_menu : Node2D = get_node("DebugMenu")
 
 func _ready() -> void:
-	debug_menu = $DebugMenu
+	pass
 
 func enable_hud() -> void:
 	visible = true

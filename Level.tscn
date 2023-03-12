@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cny10dh73waad"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="PackedScene" path="res://Character.tscn" id="1"]
-[ext_resource type="Script" path="res://Level.gd" id="2"]
-[ext_resource type="Script" path="res://LevelCamera.gd" id="3"]
-[ext_resource type="PackedScene" path="res://Obstacle.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://byprpkodhotad" path="res://player.tscn" id="1"]
+[ext_resource type="Script" path="res://level.gd" id="1_xpa4y"]
+[ext_resource type="Script" path="res://level_camera.gd" id="4_0mpcb"]
+[ext_resource type="PackedScene" path="res://obstacle.tscn" id="6"]
 
 [sub_resource type="NavigationPolygon" id="7"]
 vertices = PackedVector2Array(680, 328, 1280, 0, 1280, 832, 608, 608, 400, 640, 0, 832, 168, 688, 0, 0, 168, 592, 560, 288, 584, 360, 240, 384, 512, 528, 400, 584, 240, 216, 560, 216)
@@ -11,7 +11,7 @@ polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Arr
 outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 0, 832, 1280, 832, 680, 328, 608, 608, 400, 640, 168, 688, 168, 592, 400, 584, 512, 528, 584, 360, 560, 288, 240, 384, 240, 216, 560, 216, 560, 288, 584, 360, 680, 328, 1280, 832, 1280, 0)])
 
 [node name="Level" type="Node2D"]
-script = ExtResource("2")
+script = ExtResource("1_xpa4y")
 
 [node name="LevelNavigationPolygonInstance" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("7")
@@ -42,4 +42,4 @@ offset_bottom = 14.0
 
 [node name="LevelCamera" type="Camera2D" parent="."]
 position = Vector2(804, 496)
-script = ExtResource("3")
+script = ExtResource("4_0mpcb")
