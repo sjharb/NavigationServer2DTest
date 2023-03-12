@@ -1,18 +1,18 @@
 # Author : Shaun Harbison
 # MIT License : 2022
 
-extends KinematicBody2D
+extends CharacterBody2D
+
+class_name Character
 
 var level_scene : Node2D
 
 var nav_agent : NavigationAgent2D
 
-export var nav_agent_radius : float = 15.0
-export var nav_optimize_path : bool = false
-export var nav_avoidance_enabled : bool = true
-export var character_speed_multiplier : float = 50.0
-
-var velocity : Vector2
+@export var nav_agent_radius : float = 15.0
+@export var nav_optimize_path : bool = false
+@export var nav_avoidance_enabled : bool = true
+@export var character_speed_multiplier : float = 50.0
 
 # final navigation destination position/point
 var nav_destination : Vector2 
@@ -32,10 +32,10 @@ func _ready() -> void:
 	
 	nav_agent = $NavigationAgent2D
 	# connect nav agent signal callback functions
-	nav_agent.connect("path_changed", self, "character_path_changed")
-	nav_agent.connect("target_reached", self, "character_target_reached_reached")
-	nav_agent.connect("navigation_finished", self, "character_navigation_finished")
-	nav_agent.connect("velocity_computed", self, "character_velocity_computed")
+	nav_agent.connect("path_changed",Callable(self,"character_path_changed"))
+	nav_agent.connect("target_reached",Callable(self,"character_target_reached_reached"))
+	nav_agent.connect("navigation_finished",Callable(self,"character_navigation_finished"))
+	nav_agent.connect("velocity_computed",Callable(self,"character_velocity_computed"))
 	# config nav agent attributes
 	nav_agent.max_speed = character_speed_multiplier
 	nav_agent.radius = nav_agent_radius
@@ -58,11 +58,11 @@ func init_character(parent_level_scene : Node2D, instanced_in_code : bool) -> vo
 		next_nav_position = global_position
 		
 	# set the initial target location to nav_destination
-	nav_agent.set_target_location(nav_destination)
+	nav_agent.set_target_position(nav_destination)
 
 func _physics_process(_delta : float) -> void:
 	# get the next nav position from the character's navigation agent
-	next_nav_position = nav_agent.get_next_location()
+	next_nav_position = nav_agent.get_next_path_position()
 	# add the next nav position to the 'real' path for draw function
 	character_real_nav_path.push_back(next_nav_position)
 	# calculate the desired velocity, i.e velocity pre nav server calculated
@@ -76,10 +76,10 @@ func set_navigation_position(nav_position_to_set : Vector2) -> void:
 	nav_destination = nav_position_to_set
 	
 	# set the new character target location
-	nav_agent.set_target_location(nav_destination)
+	nav_agent.set_target_position(nav_destination)
 	
 	# calculate a new map path with the server using character nav agent map and new nav destination
-	character_nav_path = Navigation2DServer.map_get_path(nav_agent.get_navigation_map(), global_position, nav_destination, nav_optimize_path)
+	character_nav_path = NavigationServer2D.map_get_path(nav_agent.get_navigation_map(), global_position, nav_destination, nav_optimize_path)
 	
 	# clear the old real nav path, used for draw function
 	character_real_nav_path.clear()
@@ -103,10 +103,12 @@ func character_velocity_computed(calculated_velocity : Vector2) -> void:
 	# check if nav agent target is reached
 	if !nav_agent.is_target_reached():
 		# move and slide with the new calculated velocity
-		#global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
-		velocity = move_and_slide(velocity)
+		#global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
+		set_velocity(velocity)
+		move_and_slide()
+		velocity = velocity
 	else:
 		# if reached target, stand at the closest point in the navigation map
-		global_position = Navigation2DServer.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
+		global_position = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), global_position)
 
 

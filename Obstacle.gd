@@ -15,7 +15,7 @@ var selected = false
 
 func _ready() -> void:
 	obstacle_area = $Area2D
-	obstacle_area.connect("input_event", self, "_on_area_input_event")
+	obstacle_area.connect("input_event",Callable(self,"_on_area_input_event"))
 	obstacle_area.get_node("CollisionShape2D").shape.radius = collision_radius
 	nav_obstacle = $NavObstacle
 	nav_obstacle.estimate_radius = false
@@ -39,22 +39,22 @@ func init_obstacle(parent_level_scene) -> void:
 		nav_fix_66530_applied = false
 	
 	if not nav_fix_66530_applied:
-		Navigation2DServer.agent_set_map(nav_obstacle.get_rid(), get_world_2d().get_navigation_map())
-		Navigation2DServer.agent_set_radius(nav_obstacle.get_rid(), obstacle_nav_radius)
+		NavigationServer2D.agent_set_map(nav_obstacle.get_rid(), get_world_2d().get_navigation_map())
+		NavigationServer2D.agent_set_radius(nav_obstacle.get_rid(), obstacle_nav_radius)
 	# END WORKAROUND -------------------------------------------------------------
 
 func _process(_delta : float) -> void:
 	if selected:
-		global_position = Navigation2DServer.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())
+		global_position = NavigationServer2D.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())
 
 func _on_area_input_event(event_viewport : Node, event : InputEvent, event_shape_index : int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if event.button_index == BUTTON_LEFT:
+			if event.button_index == MOUSE_BUTTON_LEFT:
 				level_scene.obstacle_selected = true
 				selected = true
 		else:
 			if level_scene.obstacle_selected:
 				level_scene.obstacle_selected = false
 				selected = false
-				global_position = Navigation2DServer.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())
+				global_position = NavigationServer2D.map_get_closest_point(level_scene.level_navigation_map, get_global_mouse_position())

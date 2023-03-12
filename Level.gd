@@ -7,6 +7,8 @@ var main
 var characters = []
 var obstacles = []
 
+@onready var character_resource = preload("res://Character.gd")
+
 var level_navigation_map
 
 #var level_tile_map : TileMap
@@ -16,12 +18,12 @@ var obstacle_selected = false
 var previous_left_mouse_click_global_position : Vector2
 var previous_right_mouse_click_global_position : Vector2
 
-var level_camera
+var level_camera: Camera2D
 var level_camera_move_with_mouse = false
 var level_camera_mouse_move_drift_weight : float = 100.0
 
 var character_creation_time_limit_timer : Timer = Timer.new()
-export var character_creation_time_limit_timer_wait_time : float = 0.15
+@export var character_creation_time_limit_timer_wait_time : float = 0.15
 
 func _ready() -> void:
 	# create easy reference variables for children
@@ -46,9 +48,9 @@ func init_pre_existing_level_characters() -> void:
 	# init all the character scenes in the scene tree when starting the level
 	# other characters created in create_character() will be initilized at that time
 	for child_node in get_children():
-		if child_node is KinematicBody2D:
+		if child_node is CharacterBody2D:
 			if child_node.has_method("init_character"):
-				if characters.empty():
+				if characters.is_empty():
 					# if no target i.e. left mouse click yet, set target to character position
 					previous_left_mouse_click_global_position = child_node.global_position
 				child_node.init_character(self, false)
@@ -65,24 +67,24 @@ func init_pre_existing_level_obstacles() -> void:
 
 # TODO, add option for camera character following
 func move_camera_with_players() -> void:
-	if !characters.empty():
+	if !characters.is_empty():
 		level_camera.global_position = characters[0].global_position
 
 func _process(_delta : float) -> void:
 	# update for the draw function
-	update()
+	queue_redraw()
 
 func _draw() -> void:
 	# TODO: draw needs some clean up and has some draw errors
 	# Error: canvas_item_add_polygon: Invalid polygon data, triangulation failed.
 	for character in characters:
-		if character is KinematicBody2D and is_instance_valid(character) and character.is_inside_tree():
+		if character is CharacterBody2D and is_instance_valid(character) and character.is_inside_tree():
 			if character.character_nav_path.size() > 1:
 				var previous_line_point : Vector2 = character.character_nav_path[1]
 				for path_index in range(1, character.character_nav_path.size()):
 					var line_point : Vector2 = character.character_nav_path[path_index]
 					if previous_line_point is Vector2 and line_point is Vector2 and previous_line_point.distance_to(line_point) > 2.0:
-						draw_line(previous_line_point, line_point, Color(1.0, 0.3, 0.7, 1.0), 3.0, false)
+						draw_line(previous_line_point,line_point,Color(1.0, 0.3, 0.7, 1.0),3.0)
 						draw_circle(line_point, 4.0, Color(0.1, 5.0, 0.6, 1.0))
 					previous_line_point = line_point
 			
@@ -91,20 +93,20 @@ func _draw() -> void:
 				for path_index in range(1, character.character_real_nav_path.size()):
 					var line_point : Vector2 = character.character_real_nav_path[path_index]
 					if previous_line_point is Vector2 and line_point is Vector2 and previous_line_point.distance_to(line_point) > 2.0:
-						draw_line(previous_line_point, line_point, Color(0.6, 0.6, 0.2, 1.0), 3.0, false)
+						draw_line(previous_line_point,line_point,Color(0.6, 0.6, 0.2, 1.0),3.0)
 						draw_circle(line_point, 4.0, Color(0.3, 0.8, 0.2, 1.0))
 					previous_line_point = line_point
 			
 			draw_circle(character.next_nav_position, 10.0, Color(0.5, 1.0, 0.1, 1.0))
 			if character.global_position.distance_to(character.next_nav_position) > 1.0:
-				draw_line(character.global_position, character.next_nav_position, Color(1.0, 0.6, 0.8, 1.0), 5.0, false)
+				draw_line(character.global_position,character.next_nav_position,Color(1.0, 0.6, 0.8, 1.0),5.0)
 			
 			draw_circle(character.global_position, character.nav_agent.radius, Color(1.0, 0.0, 0.3, 1.0))
 			
 			draw_circle(character.nav_destination, character.nav_agent.radius, Color(0.7, 0.5, 0.2, 1.0))
 			
 			if character.global_position.distance_to(character.velocity) > 2.0:
-				draw_line(character.global_position, character.global_position + character.velocity, Color(0.3, 0.5, 1.0, 1.0), 3.0, false)
+				draw_line(character.global_position,character.global_position + character.velocity,Color(0.3, 0.5, 1.0, 1.0),3.0)
 			draw_circle(character.global_position + character.velocity, 5.0, Color(0.2, 0.5, 0.7, 1.0))
 	
 	for obstacle in obstacles:
@@ -120,7 +122,7 @@ func _draw() -> void:
 # Create a new instance of the Character scene
 func create_character() -> void:
 	var new_character = load("res://Character.tscn")
-	var new_character_scene = new_character.instance()
+	var new_character_scene = new_character.instantiate()
 	add_child(new_character_scene)
 	# init after adding as child of the level
 	new_character_scene.init_character(self, true)

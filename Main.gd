@@ -49,9 +49,9 @@ func _process(_delta : float) -> void:
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_DOWN:
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			level_scene.mouse_middle_wheel_down()
-		elif event.button_index == BUTTON_WHEEL_UP:
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			level_scene.mouse_middle_wheel_up()
 	elif event is InputEventMouseMotion:
 		level_scene.mouse_motion()
