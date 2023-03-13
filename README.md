@@ -3,10 +3,11 @@
 #### See 3.5 branch for old demo. https://github.com/sjharb/Navigation2DServerTest/tree/3.5
 
 Godot Asset Library
-https://godotengine.org/asset-library/asset/1427
+Coming soon for 4.0
 
 YouTube demonstration
-https://youtu.be/WCDA0O8VUIE
+Godot 4.0 : Coming Soon
+Godot 3.5 : https://youtu.be/WCDA0O8VUIE
 
 ![alt text](assets/images/screen_shots/Navigation2DServerTest_gif_8_15_2022.gif)
 
