@@ -1,13 +1,16 @@
 # NavigationServer2DTest
 ### Godot NavigationServer2D test for Godot Engine 4.0.
-#### See 3.5 branch for old demo. https://github.com/sjharb/Navigation2DServerTest/tree/3.5
+#### See 3.5 branch for old demo. 
+https://github.com/sjharb/Navigation2DServerTest/tree/3.5
 
-Godot Asset Library
-Coming soon for 4.0
+#### Godot Asset Library
+Coming soon for Godot 4.0
 
-YouTube demonstration
-Godot 4.0 : Coming Soon
-Godot 3.5 : https://youtu.be/WCDA0O8VUIE
+#### YouTube demonstration
+Coming soon for Godot 4.0
+
+Godot 3.5 
+https://youtu.be/WCDA0O8VUIE
 
 ![alt text](assets/images/screen_shots/Navigation2DServerTest_gif_8_15_2022.gif)
 
