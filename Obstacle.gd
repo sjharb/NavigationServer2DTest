@@ -3,7 +3,7 @@
 
 extends Node2D
 
-class_name Obstacle
+class_name NavObstacle
 
 @onready var obstacle_area: Area2D = get_node("Area2D")
 @onready var nav_obstacle : NavigationObstacle2D = get_node("NavObstacle")

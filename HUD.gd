@@ -5,7 +5,7 @@ extends Node2D
 
 class_name Hud
 
-@onready var debug_menu : Node2D = get_node("DebugMenu")
+@onready var controller_hints : Label = get_node("HudText/ControllerHints")
 
 func _ready() -> void:
 	pass
@@ -14,4 +14,4 @@ func enable_hud() -> void:
 	visible = true
 
 func set_version_hud(version_to_set : String) -> void:
-	debug_menu.get_node("ControllerHints").text = "v" + version_to_set + "\n" + debug_menu.get_node("ControllerHints").text
+	controller_hints.text = "v" + version_to_set + "\n" + controller_hints.text

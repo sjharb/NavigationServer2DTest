@@ -6,8 +6,8 @@ extends Node2D
 class_name Level
 
 var main
-var players = []
-var obstacles = []
+var players: Array[PlayerNavAgent] = []
+var obstacles: Array[NavObstacle] = []
 
 @onready var player_resource = preload("res://player.tscn")
 
@@ -17,15 +17,17 @@ var level_navigation_map
 
 var obstacle_selected = false
 
-var previous_left_mouse_click_global_position : Vector2
-var previous_right_mouse_click_global_position : Vector2
+var previous_left_mouse_click_global_position: Vector2
+var previous_right_mouse_click_global_position: Vector2
 
 @onready var level_camera: Camera2D = get_node("LevelCamera")
 var level_camera_move_with_mouse = false
-var level_camera_mouse_move_drift_weight : float = 20.0
+var level_camera_mouse_move_drift_weight: float = 20.0
 
-var player_creation_time_limit_timer : Timer = Timer.new()
-@export var player_creation_time_limit_timer_wait_time : float = 0.15
+var player_creation_time_limit_timer: Timer = Timer.new()
+@export var player_creation_time_limit_timer_wait_time: float = 0.15
+
+@export var level_edge_connection_margin: float = 20.0
 
 func _ready() -> void:
 	# create easy reference variables for children
@@ -33,6 +35,8 @@ func _ready() -> void:
 	#level_tile_map = $LevelNavigationPolygonInstance
 	
 	level_navigation_map = get_world_2d().get_navigation_map()
+	
+	NavigationServer2D.map_set_edge_connection_margin(level_navigation_map, 10.0)
 	
 	# configure and add the player_creation_time_limit_timer as a child of the level
 	player_creation_time_limit_timer.one_shot = true
