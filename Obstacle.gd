@@ -1,11 +1,16 @@
 # Author : Shaun Harbison
 # MIT License : 2022
 
+# Note: 75756: 4.0.3 bug fix needed to run obstacles in simulation.
+# https://github.com/godotengine/godot/pull/75756 
+# Status : Merged
+
 extends Node2D
 
 class_name NavObstacle
 
 @onready var obstacle_area: Area2D = get_node("Area2D")
+@onready var obstacle_collision_shape: CollisionShape2D = get_node("Area2D/CollisionShape2D")
 @onready var nav_obstacle : NavigationObstacle2D = get_node("NavObstacle")
 
 var collision_radius : float = 20.0
@@ -17,8 +22,7 @@ var selected = false
 
 func _ready() -> void:
 	obstacle_area.connect("input_event",Callable(self,"_on_area_input_event"))
-	obstacle_area.get_node("CollisionShape2D").shape.radius = collision_radius
-	nav_obstacle.estimate_radius = false
+	obstacle_collision_shape.shape.radius = collision_radius
 	nav_obstacle.radius = obstacle_nav_radius
 	
 # init called by parent, inits flow down from parent nodes to create easy parent child references
