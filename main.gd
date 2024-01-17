@@ -3,7 +3,7 @@
 
 extends Node2D
 
-var app_version : String = "2.0.1"
+var app_version : String = "2.1.0"
 
 @onready var level_scene : Node2D = get_node("Level")
 @onready var hud : Node2D = get_node("HudCanvasLayer/Hud")
@@ -16,7 +16,7 @@ var mouse_middle_pressed = false
 func _ready() -> void:
 	hud.enable_hud()
 	hud.set_version_hud(app_version)
-	level_scene.init(self)
+	level_scene.call_deferred("init", self)
 
 func _process(_delta : float) -> void:
 	if Input.is_action_pressed("mouse_click_left"):

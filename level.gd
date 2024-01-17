@@ -48,6 +48,10 @@ func _ready() -> void:
 # init called by parent, inits flow down from parent nodes to create easy parent child references
 func init(level_parent_scene) -> void:
 	main = level_parent_scene
+	# await for the next physics frame.
+	# await is needed to avoid map sync errors.
+	# Error "NavigationServer map query failed because it was made before first map synchronization."
+	await get_tree().physics_frame
 	init_pre_existing_level_players()
 	init_pre_existing_level_obstacles()
 	
